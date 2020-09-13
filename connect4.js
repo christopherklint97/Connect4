@@ -59,9 +59,9 @@ const makeHtmlBoard = () => {
 
 const findSpotForCol = (x) => {
   // TODO: write the real version of this, rather than always returning 0
-  for (let y = 5; y >= 0; y--) {
+  for (let y = HEIGHT; y >= 0; y--) {
     let spot = board[y][x];
-    if (spot === 1 || spot === 2) {
+    if (spot !== null) {
       continue;
     } else {
       return y;
@@ -94,20 +94,24 @@ const placeInTable = (y, x) => {
 
 const endGame = (msg) => {
   // TODO: pop up alert message
-  alert(msg);
+  setTimeout(() => {
+    alert(msg);
+  }, 1000);
 }
 
 /** handleClick: handle click of column top to play piece */
 
 const handleClick = (evt) => {
   // get x from ID of clicked cell
+  // Converts string to number with +
   const x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
-  if (y === null) {
+  /* if (y === null) {
+    // Add continue
     return endGame(`Player ${currPlayer} won!`);
-  }
+  } */
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
@@ -122,7 +126,7 @@ const handleClick = (evt) => {
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
   if (board.every(y => y.every(x => {
-    x === 1 || x === 2;
+    x !== null;
   }))) { endGame() };
 
   // switch players
