@@ -17,7 +17,9 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 const makeBoard = () => {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
-  board = Array.from(Array(HEIGHT), () => new Array(WIDTH))
+  for (let y = 0; y < HEIGHT; y++) {
+    board.push(Array.from({ length: WIDTH }));
+  }
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
@@ -59,11 +61,9 @@ const makeHtmlBoard = () => {
 
 const findSpotForCol = (x) => {
   // TODO: write the real version of this, rather than always returning 0
-  for (let y = HEIGHT; y >= 0; y--) {
+  for (let y = HEIGHT - 1; y >= 0; y--) {
     let spot = board[y][x];
-    if (spot !== null) {
-      continue;
-    } else {
+    if (!spot) {
       return y;
     }
   }
@@ -108,10 +108,9 @@ const handleClick = (evt) => {
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
-  /* if (y === null) {
-    // Add continue
-    return endGame(`Player ${currPlayer} won!`);
-  } */
+  if (y === null) {
+    return;
+  }
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
@@ -124,10 +123,10 @@ const handleClick = (evt) => {
   }
 
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
-  if (board.every(y => y.every(x => {
-    x !== null;
-  }))) { endGame() };
+  // TODO: check if all cells in board are filled; if so call endGame
+  if (board.every(row => row.every(cell => cell))) {
+    return endGame('Tie!');
+  }
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
